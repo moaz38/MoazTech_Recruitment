@@ -276,8 +276,14 @@ def quiz():
         total = len(quiz_doc['questions'])
         percent = (score / total) * 100
 
-        # Always increment attempt count
+        # 1. Increment attempt count in DB
         users_col.update_one({'_id': ObjectId(uid)}, {'$inc': {'attempts': 1}})
+
+        # 2. === REATTEMPT LOGIC FIX === 
+        # Update hone k baad wapis user ko fetch kro taake latest count mile
+        updated_user = users_col.find_one({'_id': ObjectId(uid)})
+        attempts_count = updated_user.get('attempts', 0)
+        # ==============================
 
         status = 'failed'
         employee_id = None
@@ -313,7 +319,7 @@ def quiz():
         # Clear quiz session after submission
         session.pop('quiz', None) 
 
-        # current_year = datetime.now().year (REMOVED: Now automatic)
+        # 3. Pass 'attempts_count' to the template
         return render_template(
             "quiz_result.html",
             score=score,
@@ -322,8 +328,8 @@ def quiz():
             status=status,
             employee_id=employee_id,
             user=user,
-            passing=PASSING_PERCENT # (CHANGED)
-            # current_year=current_year (REMOVED: Now automatic)
+            passing=PASSING_PERCENT,
+            attempts_count=attempts_count # <--- YEH LINE ADD KI HAI
         )
 
     # GET Request: Render the quiz form
