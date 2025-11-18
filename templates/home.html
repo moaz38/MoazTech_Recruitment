@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- 
+  ================================
+  Professional Hero Section
+  ================================
+-->
+<div class="container my-5 py-5">
+    <div class="row align-items-center">
+
+        <!-- 1. Left Side (Text Content & Buttons) -->
+        <div class="col-lg-6 fade-in-left">
+            
+            <!-- Main Headline -->
+            <h1 class="display-4 fw-bolder mb-3">
+                Welcome to <span class="text-primary">MoazTech</span> Recruitment
+            </h1>
+            
+            <!-- Sub-heading -->
+            <p class="lead text-muted mb-4">
+                Sign up or login to take the recruitment test and start your journey with us.
+            </p>
+            
+            <!-- Call to Action Buttons -->
+            <div class="d-flex flex-column flex-sm-row gap-3">
+                <a class="btn btn-primary btn-lg px-4 py-2 shadow-lg--hover" href="{{ url_for('signup') }}">
+                    <i class="icon me-1" data-feather="user-plus"></i>
+                    Sign Up Now
+                </a>
+                <a class="btn btn-outline-secondary btn-lg px-4 py-2 shadow-lg--hover" href="{{ url_for('login') }}">
+                    <i class="icon me-1" data-feather="log-in"></i>
+                    Login
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. Right Side (FIXED: Added Company Logo) -->
+        <div class="col-lg-6 d-none d-lg-block fade-in-right text-center">
+            <!-- Using the actual company logo from static files -->
+            <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                 class="img-fluid" 
+                 style="max-height: 300px; object-fit: contain;"
+                 alt="MoazTech Logo">
+        </div>
+
+    </div>
+</div>
+
+<!-- 
+  ================================
+  Page-specific Animations
+  ================================
+-->
+<style>
+    /* Fade in animations */
+    @keyframes fadeInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes fadeInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .fade-in-left {
+        animation: fadeInLeft 1s ease-out forwards;
+    }
+    
+    .fade-in-right {
+        animation: fadeInRight 1s ease-out forwards;
+    }
+
+    /* Button hover shadow (matches navbar button style) */
+    .shadow-lg--hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Feather icon alignment in buttons */
+    .btn .icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: text-bottom;
+    }
+</style>
+
+<!-- 
+  ================================
+  Footer
+  ================================
+-->
+<div class="container">
+    <hr>
+    <div class="text-center py-4 text-muted">
+        <!-- 
+          FIX: Using 'current_year' variable passed from app.py
+          (This fixes the 'strftime' error)
+        -->
+        &copy; {{ current_year }} MoazTech - All Rights Reserved.
+    </div>
+</div>
+
+{% endblock %}

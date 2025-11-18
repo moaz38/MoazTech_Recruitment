@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- 
+  ================================
+  Full VIP Dashboard Page (Coordinated)
+  - Uses a single column (col-lg-9) for coordination.
+  - All sections are now "VIP" cards.
+  ================================
+-->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- 
+              ================================
+              1. VIP Welcome Card (Redesigned)
+              ================================
+            -->
+            <div class="card shadow-lg border-0 mb-4 fade-in-down" style="border-radius: 1.5rem;">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <!-- Icon -->
+                        <div class="col-auto">
+                            <i class="icon-header text-primary" data-feather="award"></i>
+                        </div>
+                        <!-- Welcome Text -->
+                        <div class="col">
+                            <h2 class="fw-bold mb-1">Welcome, {{ user.name }}!</h2>
+                            
+                            <!-- 
+                              ================================
+                              THE "PYARI LOOK" FIX (Line Added Back + Animation)
+                              ================================
+                            -->
+                            <p class="lead text-success-emphasis fw-bold passed-message">
+                                You have successfully passed the quiz!
+                            </p>
+                            <!-- === END FIX === -->
+
+                        </div>
+                        <!-- Status Badge -->
+                        <div class="col-auto text-end">
+                            {% if results %}
+                                <span class="badge fs-6 bg-success-subtle text-success-emphasis rounded-pill p-3">
+                                    <i class="icon me-1" data-feather="check-circle"></i>
+                                    Quiz Status: Passed
+                                </span>
+                            {% else %}
+                                <span class="badge fs-6 bg-warning-subtle text-warning-emphasis rounded-pill p-3">
+                                    <i class="icon me-1" data-feather="alert-triangle"></i>
+                                    Quiz Pending
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <!-- Employee Details -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong class="text-muted d-block">Employee ID:</strong>
+                            <span class="fs-5 fw-bold">{{ user.employee_id }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="text-muted d-block">Joined On:</strong>
+                            <span class="fs-5 fw-bold">{{ user.joined.strftime('%d-%b-%Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+              ================================
+              2. Quiz Results Card (Redesigned)
+              ================================
+            -->
+            <div class="card shadow-lg border-0 mb-4 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="card-body p-5">
+                    <h4 class="mb-4 fw-bold text-primary d-flex align-items-center">
+                        <i class="icon me-2" data-feather="clipboard"></i>
+                        Your Quiz Results
+                    </h4>
+                    
+                    {% if results %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Score</th>
+                                    <th>Total</th>
+                                    <th>Percentage</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in results %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ r.score }}</td>
+                                    <td>{{ r.total }}</td>
+                                    <td class="fw-bold">{{ "%.0f"|format(r.percent) }}%</td>
+                                    <td>
+                                        {% if r.status == 'approved' %}
+                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill p-2">Passed</span>
+                                        {% else %}
+                                        <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill p-2">Failed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-warning">You haven't attempted any quizzes yet.</p>
+                    {% endif %}
+
+                    <!-- Buttons Section (Animated) -->
+                    <div class="mt-4 text-center">
+                        {% if results and results[-1].status != 'approved' %}
+                        <a href="{{ url_for('instructions') }}" class="btn btn-primary btn-lg px-5 me-2 shadow-lg--hover btn-download">
+                            <i class="icon me-1" data-feather="repeat"></i>
+                            Reattempt Quiz
+                        </a>
+                        {% endif %}
+                        {% if results and results[-1].status == 'approved' %}
+                        <!-- 
+                          ================================
+                          ID CARD FIX
+                          - Button now links to 'view_id' (new page)
+                          - 'btn-primary' (decent color)
+                          ================================
+                        -->
+                        <a href="{{ url_for('view_id') }}" class="btn btn-primary btn-lg px-5 shadow-lg--hover btn-download">
+                            <i class="icon me-1" data-feather="credit-card"></i>
+                            View ID Card
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+              ================================
+              3. Owner + Company Info Card (Redesigned)
+              ================================
+            -->
+            <div class="card shadow-lg border-0 mb-5 fade-in-up" style="animation-delay: 0.4s;">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center mb-3 mb-md-0">
+                            <img src="{{ url_for('static', filename='images/moaz_photo.jpg') }}" 
+                                 class="rounded-circle shadow-lg border border-3 border-primary" 
+                                 style="width:160px; height:160px; object-fit:cover; object-position:top; animation: float 3s ease-in-out infinite;">
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="fw-bold text-primary">Muhammad Moaz</h3>
+                            <p class="fw-semibold mb-1 text-muted">Owner of MoazTech Company</p>
+                            <p class="mt-3">
+                                MoazTech is a highly professional IT company specializing in recruitment solutions.
+                                Muhammad Moaz is the visionary founder and a highly intelligent leader driving innovation.
+                            </p>
+                            <ul class="list-unstyled mt-3">
+                                <li class="mb-2"><i class="icon me-2" data-feather="mail"></i>Email: <a href="mailto:info@moaztech.com">info@moaztech.com</a></li>
+                                <li class="mb-2"><i class="icon me-2" data-feather="phone"></i>Phone: +92-300-XXXXXXX</li>
+                                <li class="mb-2"><i class="icon me-2" data-feather="globe"></i>Website: <a href="#">www.moaztech.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End Centered Column -->
+    </div> <!-- End Row -->
+</div> <!-- End Container -->
+
+
+<!-- 
+  ================================
+  Page-specific Animations & Styles
+  (Footer removed from here)
+  ================================
+-->
+<style>
+    /* Float animation (from your original code) */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Card fade-in animations */
+    @keyframes fadeInDown {
+      0% { transform: translateY(-30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ================================
+      THE "PYARI LOOK" ANIMATION
+      ================================
+    */
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      80% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .passed-message {
+        animation: popIn 1s ease-out 1s forwards; /* Starts 1s after card loads */
+        opacity: 0; /* Start hidden */
+    }
+    /* === END FIX === */
+
+    .fade-in-down {
+        animation: fadeInDown 1s ease-out forwards;
+        opacity: 0;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0; /* Start hidden */
+    }
+
+    /* Button hover shadow (matches navbar button style) */
+    .shadow-lg--hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* VIP Download Button Animation (Blue) */
+    .btn-download:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3); /* Blue glow */
+    }
+    
+    /* Feather icon alignment */
+    .icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: text-bottom;
+        margin-right: 8px;
+    }
+    .icon-header {
+        width: 48px;
+        height: 48px;
+    }
+    
+    /* Table hover color */
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

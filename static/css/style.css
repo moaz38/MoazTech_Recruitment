@@ -1,0 +1,6 @@
+body{ font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#f8f9fa; }
+.container { max-width: 980px; }
+.card { border-radius: 8px; }
+.navbar-brand img { border-radius: 6px; }
+/* Login & Signup page top space reduce */
+

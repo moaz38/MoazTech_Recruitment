@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <!-- 
+          ================================
+          Coordinated Layout (col-lg-8)
+          ================================
+        -->
+        <div class="col-lg-8">
+            
+            <!-- The main animated card -->
+            <div class="card shadow-lg border-0 fade-in-up" style="border-radius: 1.5rem;">
+                <div class="card-body p-5">
+
+                    <!-- 
+                      ================================
+                      Conditional Result Display (Pass/Fail)
+                      ================================
+                    -->
+                    <div class="text-center">
+            
+                        {% if status == 'approved' %}
+                            <!-- 
+                              ================================
+                              PASS STATE (VIP)
+                              ================================
+                            -->
+                            <i class="icon-header text-success" data-feather="check-circle"></i>
+                            <h2 class="fw-bold mt-3">Congratulations, {{ user['name'] }}!</h2>
+                            <p class="lead text-muted">You have successfully passed the recruitment test.</p>
+                            <hr class="my-4">
+                            
+                            <h4 class="fw-bold">Your Result: <span class="text-success">{{ "%.2f"|format(percent) }}%</span></h4>
+                            <p class="fs-5">(Score: {{ score }} / {{ total }})</p>
+                            
+                            {% if employee_id %}
+                                <div class="alert alert-success mt-4" style="border-radius: 1rem;">
+                                    <strong class="d-block">Your New Employee ID:</strong>
+                                    <h3 class="my-2" style="font-weight: 700;">{{ employee_id }}</h3>
+                                </div>
+                            {% endif %}
+            
+                            <!-- Buttons for Pass -->
+                            <div class="d-flex justify-content-center gap-3 mt-5">
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-success btn-lg px-5 shadow-lg--hover btn-start-test">
+                                    <i class="icon me-1" data-feather="grid"></i>
+                                    Go to Dashboard
+                                </a>
+                                <!-- 
+                                  ================================
+                                  THE RECURSION FIX:
+                                  - 'download_id' ko 'view_id' se badla
+                                  - Text ko "View ID Card" kiya
+                                  ================================
+                                -->
+                                <a href="{{ url_for('view_id') }}" class="btn btn-outline-primary btn-lg px-5 shadow-lg--hover btn-download">
+                                    <i class="icon me-1" data-feather="credit-card"></i>
+                                    View ID Card
+                                </a>
+                            </div>
+            
+                        {% else %}
+                            <!-- 
+                              ================================
+                              FAIL STATE (VIP)
+                              ================================
+                            -->
+                            <i class="icon-header text-danger" data-feather="x-circle"></i>
+                            <h2 class="fw-bold mt-3">Better Luck Next Time, {{ user['name'] }}</h2>
+                            <p class="lead text-muted">Unfortunately, you did not meet the {{ passing }}% passing score.</p>
+                            <hr class="my-4">
+                            
+                            <h4 class="fw-bold">Your Result: <span class="text-danger">{{ "%.2f"|format(percent) }}%</span></h4>
+                            <p class="fs-5">(Score: {{ score }} / {{ total }})</p>
+                            
+                            <div class="alert alert-warning mt-4" style="border-radius: 1rem;">
+                                You have used your only attempt. Thank you for your interest in MoazTech.
+                            </div>
+            
+                            <!-- Button for Fail -->
+                            <div class="text-center mt-5">
+                                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg px-5 shadow-lg--hover">
+                                    <i class="icon me-1" data-feather="home"></i>
+                                    Back to Home
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+  ================================
+  Page-specific Animations & Styles
+  ================================
+-->
+<style>
+    /* Card fade-in animation */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0; /* Start hidden */
+    }
+
+    /* Button hover shadow (matches navbar button style) */
+    .shadow-lg--hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* VIP Start Button Animation (Green) */
+    .btn-start-test:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3); /* Green glow */
+    }
+    
+    /* VIP Download Button Animation (Blue) */
+    .btn-download:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3); /* Blue glow */
+    }
+    
+    /* Feather icon alignment in buttons */
+    .btn .icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: text-bottom;
+    }
+
+    /* Header Icon */
+    .icon-header {
+        width: 64px;
+        height: 64px;
+    }
+</style>
+
+{% endblock %}

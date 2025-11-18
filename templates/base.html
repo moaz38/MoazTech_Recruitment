@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoazTech Recruitment</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <style>
+    /* ... (saare purane styles) ... */
+    body {
+        background-color: #f8f9fa; /* Light gray background */
+        font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    /* ... (Navbar styles) ... */
+    .navbar-light .navbar-nav .nav-link {
+        font-weight: 500;
+        color: #555; /* Dark gray for links */
+        transition: all 0.2s ease-in-out;
+        transform: translateY(0);
+        margin: 0 0.25rem;
+    }
+    .navbar-light .navbar-nav .nav-link:hover,
+    .navbar-light .navbar-nav .nav-link.active {
+        color: #0d6efd; /* Bootstrap Primary color on hover/active */
+        transform: translateY(-2px);
+    }
+    /* ... (Button styles) ... */
+    .navbar-nav .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* --- Dropdown Styles (Ab use nahi ho rahe, lekin rakhe hain) --- */
+    .dropdown-toggle::after { display: none; }
+    .dropdown-menu {
+        border-radius: 0.5rem;
+        border: 1px solid #eee;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    /* ... (baaki saare styles) ... */
+    
+    /* --- VIP Footer Styles --- */
+    footer a.text-white {
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    footer a.text-white:hover {
+        text-decoration: underline;
+        color: #0d6efd !important;
+    }
+    footer .icon {
+        width: 16px;
+        vertical-align: text-bottom;
+    }
+
+    @media (max-width: 767px) {
+      footer .text-md-start {
+        text-align: center !important;
+      }
+      footer .justify-content-md-start {
+        justify-content: center !important;
+      }
+    }
+  </style>
+
+</head>
+<body class="bg-body-tertiary">
+
+<!-- 
+  ================================
+  Professional Navbar (FIXED: Color & Logo Size)
+  ================================
+-->
+<!-- FIX: bg-white removed, inline style added for decent light blue background -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #e3ecef; border-bottom: 1px solid #d0e3ff;">
+  <div class="container">
+    
+    <!-- Brand / Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+        <!-- FIX: Logo height increased from 46 to 50 -->
+        <img src="{{ url_for('static', filename='images/logo.png') }}" height="50" alt="MoazTech Logo">
+        <span class="ms-2 fw-bold">MoazTech</span>
+    </a>
+
+    <!-- Hamburger button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      
+      <!-- 
+        ================================
+        LINKS FIX:
+        - Dropdown hata diya hai.
+        - Links ab wapis samne nazar aa rahe hain.
+        ================================
+      -->
+      <ul class="navbar-nav ms-auto align-items-center">
+
+        {% if session.get('user_id') %}
+          <!-- 
+            ===========================
+            USER IS LOGGED IN (Links Visible)
+            ===========================
+          -->
+          
+          <!-- Dashboard Link (Visible) -->
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" 
+               href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+
+          <!-- Admin Panel Link (Visible, if admin) -->
+          {% if session.get('user_id') == 'admin' %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == url_for('admin') %}active{% endif %}" 
+               href="{{ url_for('admin') }}">Admin Panel</a>
+          </li>
+          {% endif %}
+          
+          <!-- Logout Link (Visible) -->
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+          
+          <!-- Separator -->
+          <li class="nav-item d-none d-lg-block mx-2">
+            <div class="vr"></div>
+          </li>
+
+          <!-- Profile Picture (Visible) -->
+          <li class="nav-item">
+                <img src="{{ url_for('static', filename='images/moaz_photo.jpg') }}" 
+                     class="rounded-circle" 
+                     style="width:40px; height:40px; object-fit:cover; object-position:top;">
+          </li>
+
+
+        {% else %}
+          <!-- 
+            ===========================
+            USER IS LOGGED OUT (Buttons)
+            ===========================
+          -->
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
+          </li>
+          
+          <li class="nav-item">
+            <a id="adminLink" class="nav-link {% if request.path == url_for('admin') %}active{% endif %}" href="{{ url_for('admin') }}">Admin</a>
+          </li>
+
+          <!-- Login/Signup Buttons -->
+          <li class="nav-item ms-2">
+            <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item ms-2">
+            <a class="btn btn-primary" href="{{ url_for('signup') }}">Sign Up</a>
+          </li>
+        {% endif %}
+      </ul>
+      <!-- === END LINKS FIX === -->
+
+    </div>
+  </div>
+</nav>
+
+<!-- Main Page Content -->
+<div class="container mt-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<!-- Admin Message Box -->
+<div id="messageFormContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+     background: rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#fff; padding:20px; border-radius:10px; width:400px; max-width:90%; position:relative;">
+        <h5 class="mb-3">Contact Admin</h5>
+        <form id="sendMessageForm">
+            <textarea id="userMessage" class="form-control mb-3" rows="4" placeholder="Type your message here..." required></textarea>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" onclick="closeMessageBox()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 
+  ================================
+  NEW VIP FOOTER
+  ================================
+-->
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-md-start">
+        <div class="row text-center text-md-start">
+
+            <!-- Column 1: Brand Info -->
+            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                <a class="navbar-brand d-flex align-items-center justify-content-center justify-content-md-start mb-3" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" height="46" alt="MoazTech Logo" style="background: white; border-radius: 8px; padding: 4px;">
+                    <span class="ms-2 fw-bold text-white fs-4">MoazTech</span>
+                </a>
+                <p>
+                    A highly professional IT company specializing in modern recruitment solutions and innovation.
+                </p>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 fw-bold text-primary">Links</h5>
+                <p><a href="{{ url_for('index') }}" class="text-white">Home</a></p>
+                <p><a href="{{ url_for('login') }}" class="text-white">Login</a></p>
+                <p><a href="{{ url_for('signup') }}" class="text-white">Sign Up</a></p>
+                <p><a href="{{ url_for('admin') }}" class="text-white">Admin</a></p>
+            </div>
+
+            <!-- Column 3: Contact -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 fw-bold text-primary">Contact</h5>
+                <p><i class="icon me-2" data-feather="mail"></i> info@moaztech.com</p>
+                <p><i class="icon me-2" data-feather="phone"></i> +92-300-XXXXXXX</p>
+                <p><i class="icon me-2" data-feather="map-pin"></i> Lahore, Pakistan</p>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Copyright -->
+        <div class="text-center">
+            <p>&copy; {{ current_year }} MoazTech. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+<!-- === END VIP FOOTER === -->
+
+
+<!-- Bootstrap JS (Yeh responsive navbar ke liye zaroori hai) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Your old script.js -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<!-- Activate Feather Icons -->
+<script>
+  feather.replace()
+</script>
+</body>
+</html>

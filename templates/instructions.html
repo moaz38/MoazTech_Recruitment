@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- 
+  ================================
+  Full VIP Instructions Page (Coordinated)
+  - Uses a single column (col-lg-9) to ensure 
+    both containers have the same width.
+  ================================
+-->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- 
+              ================================
+              1. Top Welcome Container (Restored & Coordinated)
+              ================================
+            -->
+            <div class="top-welcome-container text-center mb-4 shadow-lg">
+                <i class="icon-header text-white" data-feather="award"></i>
+                <h2 class="top-welcome-text mt-3">Welcome to MoazTech Recruitment Test</h2>
+                <p class="top-subtext">We wish you the best! Stay focused and give your best performance.</p>
+            </div>
+
+            <!-- 
+              ================================
+              2. Professional Instructions Card (Coordinated)
+              ================================
+            -->
+            <div class="card shadow-lg border-0 fade-in-up">
+                <div class="card-body p-5">
+
+                    <!-- Header Section -->
+                    <div class="text-center mb-4">
+                        <i class="icon-header text-primary" data-feather="file-text"></i>
+                        <h2 class="fw-bold mt-3">Recruitment Test Instructions</h2>
+                        <p class="text-muted">Please read the following rules carefully before you begin.</p>
+                    </div>
+
+                    <!-- Instructions List (with Icons) -->
+                    <div class="list-group list-group-flush mb-4">
+                        <div class="list-group-item d-flex align-items-center py-3">
+                            <i class="icon me-3 text-muted" data-feather="check-circle"></i>
+                            <div>
+                                <strong class="d-block">Total Questions:</strong> 5
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex align-items-center py-3">
+                            <i class="icon me-3 text-muted" data-feather="percent"></i>
+                            <div>
+                                <strong class="d-block">Passing Score:</strong> {{ passing }}%
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex align-items-center py-3">
+                            <i class="icon me-3 text-muted" data-feather="target"></i>
+                            <div>
+                                <strong class="d-block">Attempts Allowed:</strong> 3 (Three)
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex align-items-center py-3">
+                            <i class="icon me-3 text-muted" data-feather="eye-off"></i>
+                            <div>
+                                <strong class="d-block">Rules:</strong> No cheating or use of external help is allowed.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Start Button (Call to Action) -->
+                    <div class="text-center mt-5">
+                        <!-- (Fixed: Using url_for) -->
+                        <form method="post" action="{{ url_for('start_quiz') }}">
+                            <button class="btn btn-success btn-lg px-5 shadow-lg--hover btn-start-test">
+                                <i class="icon me-1" data-feather="play-circle"></i>
+                                Start Test Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- End Instructions Card -->
+            
+        </div> <!-- End Centered Column -->
+    </div> <!-- End Row -->
+</div> <!-- End Container -->
+
+
+<!-- 
+  ================================
+  Page-specific Animations & Styles
+  ================================
+-->
+<style>
+    /* 1. Styles for Top Welcome Container (Restored) */
+    .top-welcome-container {
+      /* VIP Gradient */
+      background: linear-gradient(135deg, #1d3557, #457b9d);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 1.5rem; /* Matching border radius */
+      /* VIP Animation */
+      animation: fadeInDown 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    .top-welcome-text {
+      margin: 0;
+      font-size: 2rem; /* Larger text */
+      font-weight: 700;
+    }
+
+    .top-subtext {
+      margin-top: 8px;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+    }
+
+    @keyframes fadeInDown {
+      0% { transform: translateY(-30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+
+    /* 2. Styles for New Professional Card */
+    
+    .card {
+        border-radius: 1.5rem; /* Matching border radius */
+    }
+    
+    /* Card fade-in animation */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+        animation-delay: 0.2s; /* Start after top container */
+        opacity: 0; /* Start hidden */
+    }
+
+    /* Button hover shadow (matches navbar button style) */
+    .shadow-lg--hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* VIP Start Button Animation */
+    .btn-start-test:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3); /* Green glow */
+    }
+    
+    /* Feather icon alignment in buttons */
+    .btn .icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: text-bottom;
+    }
+
+    /* Header Icon */
+    .icon-header {
+        width: 48px;
+        height: 48px;
+    }
+
+    /* List Group Icons */
+    .list-group-item .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Clean up list group appearance */
+    .list-group-item {
+        border-width: 0 0 1px 0;
+        border-color: #eee;
+    }
+    .list-group-item:last-child {
+        border-width: 0;
+    }
+</style>
+
+{% endblock %}

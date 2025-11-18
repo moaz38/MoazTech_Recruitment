@@ -1,0 +1,182 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <!-- 
+          ================================
+          Coordinated Layout (col-lg-9)
+          ================================
+        -->
+        <div class="col-lg-9">
+
+            <!-- 
+              ================================
+              Animated Title (YEH HAI WOH FIX JO AAP MANG RAHE HAIN)
+              - Ismein Icon aur Animation hai
+              ================================
+            -->
+            <div class="text-center mb-5 title-animation">
+                <i class="icon-header text-primary" data-feather="file-text"></i>
+                <h2 class="fw-bold mt-3">MoazTech Recruitment Quiz</h2>
+            </div>
+            
+            <!-- Check if quiz and questions exist -->
+            {% if quiz and quiz.questions %} 
+                <form method="POST">
+                    <!-- Loop through each question 'q' in the list -->
+                    {% for q in quiz['questions'] %}
+                        
+                        <!-- 
+                          ================================
+                          THE 100% WORKING FIX (CSS Variable)
+                          - (Error-free animation delay)
+                          ================================
+                        -->
+                        <div class="card p-4 mb-4 shadow-lg border-0 question-card" 
+                             style="--card-index: {{ loop.index }};"> 
+                            
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <!-- Display Question Number (1, 2, 3, ...) -->
+                                    <strong>Q{{ loop.index }}.</strong> {{ q['question'] }}
+                                </h5>
+                                
+                                <div class="options-group">
+                                <!-- Loop through each option 'opt' for the current question -->
+                                {% for opt in q['options'] %}
+                                    <!-- 
+                                      ================================
+                                      Clickable Option
+                                      ================================
+                                    -->
+                                    <div class="form-check py-2 rounded option-hover">
+                                        <!-- (UNCHANGED: 'name' logic is correct) -->
+                                        <input class="form-check-input" type="radio" 
+                                               name="q{{ q.index }}" 
+                                               id="q{{ q.index }}_opt{{ loop.index }}" 
+                                               value="{{ opt }}" 
+                                               required>
+                                        <label class="form-check-label fw-normal" for="q{{ q.index }}_opt{{ loop.index }}">
+                                            {{ opt }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- 
+                      ================================
+                      VIP Submit Button (Animated)
+                      ================================
+                    -->
+                    <div class="text-center mt-5">
+                        <button type="submit" class="btn btn-success btn-lg px-5 shadow-lg--hover btn-start-test">
+                            <i class="icon me-1" data-feather="check-square"></i>
+                            Submit Quiz
+                        </button>
+                    </div>
+                    
+                </form>
+            
+            {% else %}
+                <!-- Error message if quiz data fails to load -->
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Quiz Load Error!</h4>
+                    <p>We could not find the quiz questions. Please ensure the MongoDB 'quizzes' collection has data, or contact the admin.</p>
+                    <hr>
+                    <a href="{{ url_for('instructions') }}" class="btn btn-danger">Go Back to Instructions</a>
+                </div>
+            {% endif %}
+
+        </div> <!-- End Centered Column -->
+    </div> <!-- End Row -->
+</div> <!-- End Container -->
+
+
+<!-- 
+  ================================
+  Page-specific Animations & Styles
+  ================================
+-->
+<style>
+    /* ================================
+      Title Animation Styles
+      ================================
+    */
+    /* Header Icon (from instructions.html) */
+    .icon-header {
+        width: 48px;
+        height: 48px;
+    }
+
+    /* Animation for the title */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title-animation {
+        animation: fadeInDown 1s ease-out forwards;
+        opacity: 0; /* Start hidden */
+    }
+
+    /* ================================
+      Card Animation Styles
+      ================================
+    */
+    /* Card fade-in animation */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-card {
+        /* Base animation properties */
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0; /* Start hidden */
+        
+        /* ================================
+          CRITICAL FIX (CSS CALCULATION)
+          - We calculate the delay using CSS calc() and the variable
+          - 0.5s (title anim) + 0.1s stagger per card
+          ================================
+        */
+        animation-delay: calc(0.5s + (var(--card-index) * 0.1s));
+    }
+
+    /* Clickable Option Hover Effect */
+    .option-hover {
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+        padding-left: 1rem !important; /* Add padding for hover effect */
+    }
+    
+    .option-hover:hover {
+        background-color: #f8f9fa; /* Light gray */
+    }
+
+    /* Button hover shadow (matches navbar button style) */
+    .shadow-lg--hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* VIP Start Button Animation (Copied from instructions.html) */
+    .btn-start-test:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3); /* Green glow */
+    }
+    
+    /* Feather icon alignment in buttons */
+    .btn .icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: text-bottom;
+    }
+</style>
+
+{% endblock %}

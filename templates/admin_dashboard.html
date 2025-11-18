@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Admin Dashboard</h3>
+
+<h5>Applicants</h5>
+<table class="table table-sm">
+  <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Attempts</th><th>Employee ID</th></tr></thead>
+  <tbody>
+  {% for u in users %}
+    <tr>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.status }}</td>
+      <td>{{ u.attempts }}</td>
+      <td>{{ u.employee_id or '-' }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h5>Quizzes</h5>
+<ul>
+  {% for q in quizzes %}
+    <li>{{ q.category }} — {{ q.questions|length }} questions</li>
+  {% endfor %}
+</ul>
+
+<h5>Results</h5>
+<ul>
+  {% for r in results %}
+    <li>{{ r.date }} — user: {{ r.user_id }} — {{ r.score }}/{{ r.total }} — {{ r.status }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
