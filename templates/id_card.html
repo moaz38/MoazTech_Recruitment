@@ -1,15 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- 
-  ================================
-  VIP ID Card Page
-  ================================
--->
 <div class="container my-5">
     <div class="row justify-content-center">
         
-        <!-- Action Buttons (Print/Back) -->
         <div class="col-lg-6 text-center mb-4 d-print-none">
             <button onclick="window.print()" class="btn btn-primary btn-lg shadow-lg--hover btn-download">
                 <i class="icon" data-feather="printer"></i>
@@ -24,15 +18,9 @@
     </div>
     
     <div class="row justify-content-center">
-        <!-- 
-          ================================
-          The ID Card (FULL REDESIGN)
-          ================================
-        -->
         <div class="col-lg-6 col-xl-5">
             <div class="id-card shadow-lg">
                 
-                <!-- Card Header (Logo & Company) -->
                 <div class="id-card-header">
                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MoazTech Logo" class="logo">
                     <div class="company-name">
@@ -41,16 +29,8 @@
                     </div>
                 </div>
                 
-                <!-- 
-                  ================================
-                  Card Body (NEW PROFESSIONAL LAYOUT)
-                  - Employee Photo REMOVED
-                  - Fields RE-ORDERED
-                  ================================
-                -->
                 <div class="id-card-body">
                     
-                    <!-- Employee Name & Role (Now at the top) -->
                     <div class="info-container-main text-center">
                         <h2 class="employee-name">{{ user.name }}</h2>
                         <p class="employee-role text-muted">Official Employee</p>
@@ -58,7 +38,6 @@
                     
                     <hr class="my-4">
                     
-                    <!-- Detailed Info (New Fields Added & Re-ordered) -->
                     <div class="info-container-details">
                         <div class="info-item">
                             <strong class="text-muted">Employee ID:</strong>
@@ -72,12 +51,10 @@
                             <strong class="text-muted">Valid Till:</strong>
                             <span class="fw-bold">31-Dec-2026</span>
                         </div>
-                        <!-- FIX: Email Added -->
                         <div class="info-item">
                             <strong class="text-muted">Email:</strong>
                             <span class="fw-bold">{{ user.email }}</span>
                         </div>
-                        <!-- FIX: Blood Group Moved -->
                         <div class="info-item">
                             <strong class="text-muted">Blood Group:</strong>
                             <span class="fw-bold">________</span>
@@ -85,26 +62,21 @@
                     </div>
                 </div>
                 
-                <!-- Card Footer (Address & Barcode) -->
                 <div class="id-card-footer">
-                    <!-- NEW FIELD (Company Address) -->
                     <p class="company-address text-muted">
                         <i class="icon" data-feather="map-pin" style="width: 14px;"></i>
                         123 MoazTech Park, Johar Town, Lahore, Pakistan
                     </p>
-                    <!-- Placeholder for barcode -->
-                    <img src="https://placehold.co/300x50/000000/FFFFFF?text=|||%20||||%20|||%20||||||" alt="Barcode" style="width: 100%; height: 40px; object-fit: cover;">
+                    
+                    <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text={{ user.employee_id }}&scale=3&height=10&incltext=false&color=333333" 
+                         alt="Barcode" 
+                         style="width: 100%; height: 50px; object-fit: contain;">
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 
-  ================================
-  Page-specific Styles
-  ================================
--->
 <style>
     /* ID Card Styling */
     .id-card {
