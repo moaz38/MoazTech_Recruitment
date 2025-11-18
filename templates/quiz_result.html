@@ -47,16 +47,39 @@
                             <h4 class="fw-bold">Your Result: <span class="text-danger">{{ "%.2f"|format(percent) }}%</span></h4>
                             <p class="fs-5">(Score: {{ score }} / {{ total }})</p>
                             
-                            <div class="alert alert-warning mt-4" style="border-radius: 1rem;">
-                                You have used your only attempt. Thank you for your interest in MoazTech.
-                            </div>
-            
-                            <div class="d-grid gap-3 d-md-block mt-5">
-                                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg px-md-5 shadow-lg--hover">
-                                    <i class="icon me-1" data-feather="home"></i>
-                                    Back to Home
-                                </a>
-                            </div>
+                            {% if attempts_count < 3 %}
+                                <div class="alert alert-info mt-4" style="border-radius: 1rem;">
+                                    <strong>Don't give up!</strong><br>
+                                    You have <strong>{{ 3 - attempts_count }} attempts</strong> remaining.
+                                </div>
+
+                                <div class="d-grid gap-3 d-md-flex justify-content-md-center mt-5">
+                                    <form action="{{ url_for('start_quiz') }}" method="POST" class="w-100 w-md-auto">
+                                        <button type="submit" class="btn btn-warning btn-lg w-100 px-md-5 shadow-lg--hover">
+                                            <i class="icon me-1" data-feather="refresh-cw"></i>
+                                            Reattempt Test
+                                        </button>
+                                    </form>
+                                    
+                                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg px-md-5 shadow-lg--hover">
+                                        <i class="icon me-1" data-feather="home"></i>
+                                        Quit & Go Home
+                                    </a>
+                                </div>
+
+                            {% else %}
+                                <div class="alert alert-warning mt-4" style="border-radius: 1rem;">
+                                    You have used all <strong>3 attempts</strong>. Thank you for your interest in MoazTech.
+                                </div>
+                
+                                <div class="d-grid gap-3 d-md-block mt-5">
+                                    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg px-md-5 shadow-lg--hover">
+                                        <i class="icon me-1" data-feather="home"></i>
+                                        Back to Home
+                                    </a>
+                                </div>
+                            {% endif %}
+
                         {% endif %}
                         
                     </div>
